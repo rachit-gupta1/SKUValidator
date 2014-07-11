@@ -4,17 +4,9 @@
 
 package skuvalidator;
 
-import org.jdesktop.application.Action;
-import org.jdesktop.application.ResourceMap;
+import java.awt.CardLayout;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.FrameView;
-import org.jdesktop.application.TaskMonitor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.Timer;
-import javax.swing.Icon;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 
 /**
  * The application's main frame.
@@ -26,63 +18,8 @@ public class SKUValidatorView extends FrameView {
 
         initComponents();
 
-        // status bar initialization - message timeout, idle icon and busy animation, etc
-        ResourceMap resourceMap = getResourceMap();
-        int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
-        messageTimer = new Timer(messageTimeout, new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                statusMessageLabel.setText("");
-            }
-        });
-        messageTimer.setRepeats(false);
-        int busyAnimationRate = resourceMap.getInteger("StatusBar.busyAnimationRate");
-        for (int i = 0; i < busyIcons.length; i++) {
-            busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");
-        }
-        busyIconTimer = new Timer(busyAnimationRate, new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                busyIconIndex = (busyIconIndex + 1) % busyIcons.length;
-                statusAnimationLabel.setIcon(busyIcons[busyIconIndex]);
-            }
-        });
-        idleIcon = resourceMap.getIcon("StatusBar.idleIcon");
-        statusAnimationLabel.setIcon(idleIcon);
-
-        // connecting action tasks to status bar via TaskMonitor
-        TaskMonitor taskMonitor = new TaskMonitor(getApplication().getContext());
-        taskMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                String propertyName = evt.getPropertyName();
-                if ("started".equals(propertyName)) {
-                    if (!busyIconTimer.isRunning()) {
-                        statusAnimationLabel.setIcon(busyIcons[0]);
-                        busyIconIndex = 0;
-                        busyIconTimer.start();
-                    }
-                } else if ("done".equals(propertyName)) {
-                    busyIconTimer.stop();
-                    statusAnimationLabel.setIcon(idleIcon);
-                } else if ("message".equals(propertyName)) {
-                    String text = (String)(evt.getNewValue());
-                    statusMessageLabel.setText((text == null) ? "" : text);
-                    messageTimer.restart();
-                } else if ("progress".equals(propertyName)) {
-                    int value = (Integer)(evt.getNewValue());
-                }
-            }
-        });
+        // connecting action tasks to status bar via TaskMonito
     }
-
-    @Action
-    public void showAboutBox() {
-        if (aboutBox == null) {
-            JFrame mainFrame = SKUValidatorApp.getApplication().getMainFrame();
-            aboutBox = new SKUValidatorAboutBox(mainFrame);
-            aboutBox.setLocationRelativeTo(mainFrame);
-        }
-        SKUValidatorApp.getApplication().show(aboutBox);
-    }
-
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -92,100 +29,381 @@ public class SKUValidatorView extends FrameView {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFrame1 = new javax.swing.JFrame();
         mainPanel = new javax.swing.JPanel();
-        menuBar = new javax.swing.JMenuBar();
-        javax.swing.JMenu fileMenu = new javax.swing.JMenu();
-        javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
-        javax.swing.JMenu helpMenu = new javax.swing.JMenu();
-        javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
-        statusPanel = new javax.swing.JPanel();
-        javax.swing.JSeparator statusPanelSeparator = new javax.swing.JSeparator();
-        statusMessageLabel = new javax.swing.JLabel();
-        statusAnimationLabel = new javax.swing.JLabel();
+        Panel1 = new javax.swing.JPanel();
+        createProfilesButton = new javax.swing.JButton();
+        listProfilesButton = new javax.swing.JButton();
+        Panel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        domainTextField = new javax.swing.JTextField();
+        authCheckBox = new javax.swing.JCheckBox();
+        usernameLabel = new javax.swing.JLabel();
+        usernameTextField = new javax.swing.JTextField();
+        passwordLabel = new javax.swing.JLabel();
+        passwordTextField = new javax.swing.JPasswordField();
+        uploadTestFileButton = new javax.swing.JButton();
+        submitButton = new javax.swing.JButton();
+        filler1 = new javax.swing.Box.Filler(null, null, null);
+        cancelButton = new javax.swing.JButton();
+        Panel3 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        profileList = new javax.swing.JList();
+        runProfileButton = new javax.swing.JButton();
+        modifyProfileButton = new javax.swing.JButton();
+        deleteProfileButton = new javax.swing.JButton();
+        okButton = new javax.swing.JButton();
+
+        jFrame1.setName("jFrame1"); // NOI18N
 
         mainPanel.setName("mainPanel"); // NOI18N
+        mainPanel.setLayout(new java.awt.CardLayout());
 
-        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
-        mainPanel.setLayout(mainPanelLayout);
-        mainPanelLayout.setHorizontalGroup(
-            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        mainPanelLayout.setVerticalGroup(
-            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 266, Short.MAX_VALUE)
-        );
-
-        menuBar.setName("menuBar"); // NOI18N
+        Panel1.setName("Panel1"); // NOI18N
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(skuvalidator.SKUValidatorApp.class).getContext().getResourceMap(SKUValidatorView.class);
-        fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
-        fileMenu.setName("fileMenu"); // NOI18N
+        createProfilesButton.setText(resourceMap.getString("createProfilesButton.text")); // NOI18N
+        createProfilesButton.setName("createProfilesButton"); // NOI18N
+        createProfilesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createProfilesButtonActionPerformed(evt);
+            }
+        });
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(skuvalidator.SKUValidatorApp.class).getContext().getActionMap(SKUValidatorView.class, this);
-        exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
-        exitMenuItem.setName("exitMenuItem"); // NOI18N
-        fileMenu.add(exitMenuItem);
+        listProfilesButton.setText(resourceMap.getString("listProfilesButton.text")); // NOI18N
+        listProfilesButton.setName("listProfilesButton"); // NOI18N
+        listProfilesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listProfilesButtonActionPerformed(evt);
+            }
+        });
 
-        menuBar.add(fileMenu);
+        javax.swing.GroupLayout Panel1Layout = new javax.swing.GroupLayout(Panel1);
+        Panel1.setLayout(Panel1Layout);
+        Panel1Layout.setHorizontalGroup(
+            Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Panel1Layout.createSequentialGroup()
+                .addGap(170, 170, 170)
+                .addGroup(Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(listProfilesButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(createProfilesButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(121, Short.MAX_VALUE))
+        );
+        Panel1Layout.setVerticalGroup(
+            Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Panel1Layout.createSequentialGroup()
+                .addGap(73, 73, 73)
+                .addComponent(createProfilesButton)
+                .addGap(58, 58, 58)
+                .addComponent(listProfilesButton)
+                .addContainerGap(109, Short.MAX_VALUE))
+        );
 
-        helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
-        helpMenu.setName("helpMenu"); // NOI18N
+        mainPanel.add(Panel1, "card2");
 
-        aboutMenuItem.setAction(actionMap.get("showAboutBox")); // NOI18N
-        aboutMenuItem.setName("aboutMenuItem"); // NOI18N
-        helpMenu.add(aboutMenuItem);
+        Panel2.setName("Panel2"); // NOI18N
 
-        menuBar.add(helpMenu);
+        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setName("jLabel1"); // NOI18N
 
-        statusPanel.setName("statusPanel"); // NOI18N
+        domainTextField.setText(resourceMap.getString("domainTextField.text")); // NOI18N
+        domainTextField.setName("domainTextField"); // NOI18N
 
-        statusMessageLabel.setName("statusMessageLabel"); // NOI18N
+        authCheckBox.setText(resourceMap.getString("authCheckBox.text")); // NOI18N
+        authCheckBox.setName("authCheckBox"); // NOI18N
+        authCheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                authCheckBoxStateChanged(evt);
+            }
+        });
 
-        statusAnimationLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        statusAnimationLabel.setName("statusAnimationLabel"); // NOI18N
+        usernameLabel.setText(resourceMap.getString("usernameLabel.text")); // NOI18N
+        usernameLabel.setName("usernameLabel"); // NOI18N
 
-        javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
-        statusPanel.setLayout(statusPanelLayout);
-        statusPanelLayout.setHorizontalGroup(
-            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-            .addGroup(statusPanelLayout.createSequentialGroup()
+        usernameTextField.setText(resourceMap.getString("usernameTextField.text")); // NOI18N
+        usernameTextField.setName("usernameTextField"); // NOI18N
+
+        passwordLabel.setText(resourceMap.getString("passwordLabel.text")); // NOI18N
+        passwordLabel.setName("passwordLabel"); // NOI18N
+
+        passwordTextField.setText(resourceMap.getString("passwordTextField.text")); // NOI18N
+        passwordTextField.setName("passwordTextField"); // NOI18N
+
+        uploadTestFileButton.setText(resourceMap.getString("uploadTestFileButton.text")); // NOI18N
+        uploadTestFileButton.setName("uploadTestFileButton"); // NOI18N
+        uploadTestFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uploadTestFileButtonActionPerformed(evt);
+            }
+        });
+
+        submitButton.setText(resourceMap.getString("submitButton.text")); // NOI18N
+        submitButton.setName("submitButton"); // NOI18N
+        submitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitButtonActionPerformed(evt);
+            }
+        });
+
+        filler1.setName("filler1"); // NOI18N
+
+        cancelButton.setText(resourceMap.getString("cancelButton.text")); // NOI18N
+        cancelButton.setName("cancelButton"); // NOI18N
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout Panel2Layout = new javax.swing.GroupLayout(Panel2);
+        Panel2.setLayout(Panel2Layout);
+        Panel2Layout.setHorizontalGroup(
+            Panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Panel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(statusMessageLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 376, Short.MAX_VALUE)
-                .addComponent(statusAnimationLabel)
+                .addGroup(Panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(Panel2Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                        .addComponent(domainTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(authCheckBox)
+                    .addGroup(Panel2Layout.createSequentialGroup()
+                        .addGroup(Panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(usernameLabel)
+                            .addComponent(passwordLabel))
+                        .addGap(18, 18, 18)
+                        .addGroup(Panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(passwordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+                            .addComponent(usernameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)))
+                    .addGroup(Panel2Layout.createSequentialGroup()
+                        .addGroup(Panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(submitButton, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                            .addComponent(uploadTestFileButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(111, 111, 111)
+                        .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
-        statusPanelLayout.setVerticalGroup(
-            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addComponent(statusPanelSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(statusMessageLabel)
-                    .addComponent(statusAnimationLabel))
-                .addGap(3, 3, 3))
+        Panel2Layout.setVerticalGroup(
+            Panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Panel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(Panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(domainTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(authCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(Panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(usernameLabel)
+                    .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addGroup(Panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(passwordLabel)
+                    .addComponent(passwordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(uploadTestFileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(Panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(Panel2Layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(Panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(submitButton)
+                        .addComponent(cancelButton)))
+                .addContainerGap(45, Short.MAX_VALUE))
+        );
+
+        mainPanel.add(Panel2, "card3");
+
+        Panel3.setName("Panel3"); // NOI18N
+
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        profileList.setName("profileList"); // NOI18N
+        jScrollPane1.setViewportView(profileList);
+
+        runProfileButton.setText(resourceMap.getString("runProfileButton.text")); // NOI18N
+        runProfileButton.setName("runProfileButton"); // NOI18N
+        runProfileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                runProfileButtonActionPerformed(evt);
+            }
+        });
+
+        modifyProfileButton.setText(resourceMap.getString("modifyProfileButton.text")); // NOI18N
+        modifyProfileButton.setName("modifyProfileButton"); // NOI18N
+        modifyProfileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modifyProfileButtonActionPerformed(evt);
+            }
+        });
+
+        deleteProfileButton.setText(resourceMap.getString("deleteProfileButton.text")); // NOI18N
+        deleteProfileButton.setName("deleteProfileButton"); // NOI18N
+        deleteProfileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteProfileButtonActionPerformed(evt);
+            }
+        });
+
+        okButton.setText(resourceMap.getString("okButton.text")); // NOI18N
+        okButton.setName("okButton"); // NOI18N
+        okButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout Panel3Layout = new javax.swing.GroupLayout(Panel3);
+        Panel3.setLayout(Panel3Layout);
+        Panel3Layout.setHorizontalGroup(
+            Panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Panel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(Panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(Panel3Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(Panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(deleteProfileButton, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                            .addComponent(modifyProfileButton, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                            .addComponent(runProfileButton, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Panel3Layout.createSequentialGroup()
+                        .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(114, 114, 114))))
+        );
+        Panel3Layout.setVerticalGroup(
+            Panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Panel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(Panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(Panel3Layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(runProfileButton)
+                        .addGap(45, 45, 45)
+                        .addComponent(modifyProfileButton)
+                        .addGap(46, 46, 46)
+                        .addComponent(deleteProfileButton))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(okButton)
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+
+        mainPanel.add(Panel3, "card4");
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jFrame1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jFrame1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         setComponent(mainPanel);
-        setMenuBar(menuBar);
-        setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void createProfilesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createProfilesButtonActionPerformed
+        // TODO add your handling code here:
+        CardLayout cards = (CardLayout)mainPanel.getLayout();
+        cards.show(mainPanel, "card3");
+    }//GEN-LAST:event_createProfilesButtonActionPerformed
+
+    private void authCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_authCheckBoxStateChanged
+        // TODO add your handling code here:
+        if(authCheckBox.isSelected()) {
+            usernameLabel.setVisible(true);
+            usernameTextField.setVisible(true);
+            passwordLabel.setVisible(true);
+            passwordTextField.setVisible(true);
+        }
+        else {
+            usernameLabel.setVisible(false);
+            usernameTextField.setVisible(false);
+            passwordLabel.setVisible(false);
+            passwordTextField.setVisible(false);
+        }
+    }//GEN-LAST:event_authCheckBoxStateChanged
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        // TODO add your handling code here:
+        CardLayout cards = (CardLayout)mainPanel.getLayout();
+        cards.show(mainPanel, "card2");
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_submitButtonActionPerformed
+
+    private void uploadTestFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadTestFileButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_uploadTestFileButtonActionPerformed
+
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        // TODO add your handling code here:
+        CardLayout cards = (CardLayout)mainPanel.getLayout();
+        cards.show(mainPanel, "card2");
+    }//GEN-LAST:event_okButtonActionPerformed
+
+    private void listProfilesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listProfilesButtonActionPerformed
+        // TODO add your handling code here:
+        CardLayout cards = (CardLayout)mainPanel.getLayout();
+        cards.show(mainPanel, "card4");
+    }//GEN-LAST:event_listProfilesButtonActionPerformed
+
+    private void runProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runProfileButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_runProfileButtonActionPerformed
+
+    private void modifyProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyProfileButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_modifyProfileButtonActionPerformed
+
+    private void deleteProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteProfileButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_deleteProfileButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel Panel1;
+    private javax.swing.JPanel Panel2;
+    private javax.swing.JPanel Panel3;
+    private javax.swing.JCheckBox authCheckBox;
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JButton createProfilesButton;
+    private javax.swing.JButton deleteProfileButton;
+    private javax.swing.JTextField domainTextField;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.JFrame jFrame1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton listProfilesButton;
     private javax.swing.JPanel mainPanel;
-    private javax.swing.JMenuBar menuBar;
-    private javax.swing.JLabel statusAnimationLabel;
-    private javax.swing.JLabel statusMessageLabel;
-    private javax.swing.JPanel statusPanel;
+    private javax.swing.JButton modifyProfileButton;
+    private javax.swing.JButton okButton;
+    private javax.swing.JLabel passwordLabel;
+    private javax.swing.JPasswordField passwordTextField;
+    private javax.swing.JList profileList;
+    private javax.swing.JButton runProfileButton;
+    private javax.swing.JButton submitButton;
+    private javax.swing.JButton uploadTestFileButton;
+    private javax.swing.JLabel usernameLabel;
+    private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
 
-    private final Timer messageTimer;
-    private final Timer busyIconTimer;
-    private final Icon idleIcon;
-    private final Icon[] busyIcons = new Icon[15];
-    private int busyIconIndex = 0;
-
-    private JDialog aboutBox;
 }

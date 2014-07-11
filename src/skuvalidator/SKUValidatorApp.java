@@ -40,5 +40,7 @@ public class SKUValidatorApp extends SingleFrameApplication {
      */
     public static void main(String[] args) {
         launch(SKUValidatorApp.class, args);
+        DbHandler handler = new DbHandler();
+        handler.createEntry("http://indfas.alice/", "men", "abc,def,ghi,jkl,mno,pqr,stu,vwx,yz");
     }
 }
