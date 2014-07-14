@@ -5,6 +5,12 @@
 package skuvalidator;
 
 import java.awt.CardLayout;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 /**
@@ -187,7 +193,7 @@ public class CreateProfileView extends JPanel{
     private void uploadTestFileButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.showOpenDialog(Panel2);
+        fileChooser.showOpenDialog(this);
         File testFile = fileChooser.getSelectedFile(); 
         
         try{
