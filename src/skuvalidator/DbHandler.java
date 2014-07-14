@@ -79,6 +79,9 @@ public class DbHandler {
                     statement.setString(2, string);
                     statement.executeUpdate();
                 }
+                statement.close();
+                connection.close();
+                generatedKeys.close();
             }
             else
                 return false;

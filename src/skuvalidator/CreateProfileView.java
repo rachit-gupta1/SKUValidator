@@ -8,9 +8,8 @@ import java.awt.CardLayout;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -31,10 +30,16 @@ public class CreateProfileView extends JPanel{
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel mainPanel;
+    
+    private boolean isTestFileValid;
+    private boolean isTestFileUploaded;
+    private String testFileContents;
 
     public CreateProfileView(javax.swing.JPanel parent) {
         
         mainPanel = parent;
+        isTestFileValid = false;
+        isTestFileUploaded = false;
         
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(skuvalidator.SKUValidatorApp.class).getContext().getResourceMap(SKUValidatorView.class);
         
@@ -187,6 +192,35 @@ public class CreateProfileView extends JPanel{
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         
+        String domainName = domainTextField.getText();
+        
+        if("".equals(domainName)) {
+            JOptionPane.showMessageDialog(this, "The domain field cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if(!isTestFileUploaded) {
+            JOptionPane.showMessageDialog(this, "Please upload a test file.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if(!isTestFileValid) {
+            JOptionPane.showMessageDialog(this, "The file you have entered is not valid. Please upload again.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if(!domainName.startsWith("http://"))
+            domainName = "http://" + domainName;
+        
+        DbHandler dbHandler = new DbHandler();
+        String[] fileContents = testFileContents.split(";");
+        String searchTerm = fileContents[0];
+        String skuList = fileContents[1];
+        boolean entryResults = dbHandler.createEntry(domainName, searchTerm, skuList);
+        if(!entryResults) {
+            JOptionPane.showMessageDialog(this, "Something went wrong. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
     }
     
     
@@ -199,40 +233,33 @@ public class CreateProfileView extends JPanel{
         try{
             String fileData;
         
-        StringBuilder fileDataBuilder = new StringBuilder(1000);
-		BufferedReader reader = new BufferedReader(new FileReader(testFile));
+            StringBuilder fileDataBuilder = new StringBuilder(1000);
+            BufferedReader reader = new BufferedReader(new FileReader(testFile));
  
-		char[] buf = new char[1024];
-		int numRead = 0;
-		while ((numRead = reader.read(buf)) != -1) {
-			String readData = String.valueOf(buf, 0, numRead);
-			fileDataBuilder.append(readData);
-			buf = new char[1024];
-                        
-		}
-                
- 
-		reader.close();
-                fileData = fileDataBuilder.toString();
-                //System.out.println(fileData);
-                String regex="[a-zA-Z0-9]*;[a-zA-Z0-9]*[,[a-zA-Z0-9]*]*";
-                Pattern r = Pattern.compile(regex);
-                Matcher m = r.matcher(fileData);
-                int count=0;
-      if(m.matches())
-      {
-          System.out.println("found");
-      }
-      else
-          System.out.println("not found");
-          
-                
-                
-        }
-        catch(Exception e)
-        {
+            char[] buf = new char[1024];
+            int numRead = 0;
+            while ((numRead = reader.read(buf)) != -1) {
+                String readData = String.valueOf(buf, 0, numRead);
+                fileDataBuilder.append(readData);
+                buf = new char[1024];
+            }                
+            reader.close();
+            fileData = fileDataBuilder.toString();
+            System.out.println(fileData);
+            String regex="[a-zA-Z0-9 ]*;[a-zA-Z0-9]*[,[a-zA-Z0-9]+]*";
+            if(!fileData.matches(regex))
+                isTestFileValid = false;
+            else
+                isTestFileValid = true;
             
-        }
+            isTestFileUploaded = true;
+            testFileContents = fileData;
+    
+       }
+       catch(Exception e)
+       {
+            
+       }
     }
     
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
