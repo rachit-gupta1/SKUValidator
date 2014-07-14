@@ -186,6 +186,47 @@ public class CreateProfileView extends JPanel{
     
     private void uploadTestFileButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.showOpenDialog(Panel2);
+        File testFile = fileChooser.getSelectedFile(); 
+        
+        try{
+            String fileData;
+        
+        StringBuilder fileDataBuilder = new StringBuilder(1000);
+		BufferedReader reader = new BufferedReader(new FileReader(testFile));
+ 
+		char[] buf = new char[1024];
+		int numRead = 0;
+		while ((numRead = reader.read(buf)) != -1) {
+			String readData = String.valueOf(buf, 0, numRead);
+			fileDataBuilder.append(readData);
+			buf = new char[1024];
+                        
+		}
+                
+ 
+		reader.close();
+                fileData = fileDataBuilder.toString();
+                //System.out.println(fileData);
+                String regex="[a-zA-Z0-9]*;[a-zA-Z0-9]*[,[a-zA-Z0-9]*]*";
+                Pattern r = Pattern.compile(regex);
+                Matcher m = r.matcher(fileData);
+                int count=0;
+      if(m.matches())
+      {
+          System.out.println("found");
+      }
+      else
+          System.out.println("not found");
+          
+                
+                
+        }
+        catch(Exception e)
+        {
+            
+        }
     }
     
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
