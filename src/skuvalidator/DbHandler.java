@@ -101,7 +101,20 @@ public class DbHandler {
         return true;
     }
 
-    public boolean deleteEntry() {
+    public boolean deleteEntry(String id) {
+        try {
+            String deleteString = "DELETE FROM profile_list WHERE profile_id=" + id;
+            statement = connection.prepareStatement(deleteString);
+            statement.executeUpdate();
+            
+            deleteString = "DELETE FROM sku_list WHERE sku_id=" + id;
+            statement = connection.prepareStatement(deleteString);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(DbHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        
         return true;
     }
 

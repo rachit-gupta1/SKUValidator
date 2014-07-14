@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 
@@ -41,7 +42,11 @@ public class ListProfilesView extends JPanel {
         profileList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
 
             public void valueChanged(ListSelectionEvent arg0) {
-                selectedProfile = resultList.get(profileList.getSelectedIndex());
+                int selectedIndex = profileList.getSelectedIndex();
+                if(selectedIndex != -1)
+                    selectedProfile = resultList.get(selectedIndex);
+                else
+                    selectedProfile = new ProfileDetails();
             }
         });
         
@@ -129,6 +134,22 @@ public class ListProfilesView extends JPanel {
     
     private void deleteProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        String id = selectedProfile.getProfileID();
+        if(id.equals(""))
+            return;
+        
+        int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this profile?");
+        if(response == JOptionPane.YES_OPTION) {
+            DbHandler dbHandler = new DbHandler();
+            boolean deleteRes = dbHandler.deleteEntry(id);
+            if(!deleteRes) {
+                JOptionPane.showMessageDialog(this, "Something went wrong. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            else {
+                populateProfileList();
+            }
+        }
     }
     
      private void modifyProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,6 +168,7 @@ public class ListProfilesView extends JPanel {
     
     private void populateProfileList() {
         DbHandler dbHandler = new DbHandler();
+        resultList = null;
         resultList = dbHandler.getAllEntries();
         DefaultListModel listModel = new DefaultListModel();
         for (ProfileDetails profileDetails : resultList) {
@@ -155,7 +177,6 @@ public class ListProfilesView extends JPanel {
         profileList.setModel(listModel);
         profileList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         profileList.setLayoutOrientation(JList.VERTICAL);
-        profileList.setVisibleRowCount(-1);
     }
     
     
