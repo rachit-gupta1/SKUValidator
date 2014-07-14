@@ -6,6 +6,11 @@ package skuvalidator;
 
 import java.awt.CardLayout;
 import javax.swing.JPanel;
+import java.util.List;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
 
 /**
  *
@@ -20,23 +25,33 @@ public class ListProfilesView extends JPanel {
     private javax.swing.JButton modifyProfileButton;
     private javax.swing.JButton runProfileButton;
     private javax.swing.JButton okButton;
+    
+    List<ProfileDetails> resultList;
+    ProfileDetails selectedProfile;
 
     public ListProfilesView(JPanel parent) {
         
         mainPanel = parent;
+        selectedProfile = new ProfileDetails();
         
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(skuvalidator.SKUValidatorApp.class).getContext().getResourceMap(SKUValidatorView.class);
         
         profileList = new javax.swing.JList();
-        profileList.setName("profileList"); // NOI18N
+        profileList.setName("profileList");
+        profileList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+
+            public void valueChanged(ListSelectionEvent arg0) {
+                selectedProfile = resultList.get(profileList.getSelectedIndex());
+            }
+        });
         
         jScrollPane1 = new javax.swing.JScrollPane();
-        jScrollPane1.setName("jScrollPane1"); // NOI18N
+        jScrollPane1.setName("jScrollPane1"); 
         jScrollPane1.setViewportView(profileList);
         
         deleteProfileButton = new javax.swing.JButton();
-        deleteProfileButton.setText(resourceMap.getString("deleteProfileButton.text")); // NOI18N
-        deleteProfileButton.setName("deleteProfileButton"); // NOI18N
+        deleteProfileButton.setText(resourceMap.getString("deleteProfileButton.text")); 
+        deleteProfileButton.setName("deleteProfileButton"); 
         deleteProfileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteProfileButtonActionPerformed(evt);
@@ -44,8 +59,8 @@ public class ListProfilesView extends JPanel {
         });
         
         modifyProfileButton = new javax.swing.JButton();
-        modifyProfileButton.setText(resourceMap.getString("modifyProfileButton.text")); // NOI18N
-        modifyProfileButton.setName("modifyProfileButton"); // NOI18N
+        modifyProfileButton.setText(resourceMap.getString("modifyProfileButton.text")); 
+        modifyProfileButton.setName("modifyProfileButton"); 
         modifyProfileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 modifyProfileButtonActionPerformed(evt);
@@ -53,8 +68,8 @@ public class ListProfilesView extends JPanel {
         });
         
         runProfileButton = new javax.swing.JButton();
-        runProfileButton.setText(resourceMap.getString("runProfileButton.text")); // NOI18N
-        runProfileButton.setName("runProfileButton"); // NOI18N
+        runProfileButton.setText(resourceMap.getString("runProfileButton.text")); 
+        runProfileButton.setName("runProfileButton"); 
         runProfileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 runProfileButtonActionPerformed(evt);
@@ -62,8 +77,8 @@ public class ListProfilesView extends JPanel {
         });        
         
         okButton = new javax.swing.JButton();
-        okButton.setText(resourceMap.getString("okButton.text")); // NOI18N
-        okButton.setName("okButton"); // NOI18N
+        okButton.setText(resourceMap.getString("okButton.text")); 
+        okButton.setName("okButton"); 
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
@@ -80,7 +95,7 @@ public class ListProfilesView extends JPanel {
                 .addContainerGap()
                 .addGroup(Panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(Panel3Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(Panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(deleteProfileButton, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
@@ -108,6 +123,8 @@ public class ListProfilesView extends JPanel {
                 .addComponent(okButton)
                 .addContainerGap(20, Short.MAX_VALUE))
         );
+        
+        populateProfileList();
     }
     
     private void deleteProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -126,6 +143,19 @@ public class ListProfilesView extends JPanel {
         // TODO add your handling code here:
         CardLayout cards = (CardLayout)mainPanel.getLayout();
         cards.show(mainPanel, "card2");
+    }
+    
+    private void populateProfileList() {
+        DbHandler dbHandler = new DbHandler();
+        resultList = dbHandler.getAllEntries();
+        DefaultListModel listModel = new DefaultListModel();
+        for (ProfileDetails profileDetails : resultList) {
+            listModel.addElement(profileDetails.getDomainName() + "; " + profileDetails.getTimeStamp());
+        }
+        profileList.setModel(listModel);
+        profileList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        profileList.setLayoutOrientation(JList.VERTICAL);
+        profileList.setVisibleRowCount(-1);
     }
     
     
