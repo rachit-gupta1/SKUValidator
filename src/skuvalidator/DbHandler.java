@@ -36,8 +36,10 @@ public class DbHandler {
             // Create the tables if they do not exist.
             statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "+ 
                               "profile_list(" +
+                              "user_email TEXT," +
                               "domain_name TEXT," +
                               "search_term TEXT," +
+                              "timestamp TEXT," +
                               "profile_id INTEGER PRIMARY KEY AUTOINCREMENT)");
             statement.execute();
             
@@ -54,15 +56,16 @@ public class DbHandler {
         }
     }
 
-    public boolean createEntry(String domainName, String searchTerm, String SKUList) {
-        String insertString = "INSERT INTO profile_list VALUES(?, ?, NULL)";
+    public boolean createEntry(String userEmail, String domainName, String searchTerm, String SKUList, String timeStamp) {
+        String insertString = "INSERT INTO profile_list VALUES(?, ?, ?, ?, NULL)";
         ResultSet generatedKeys = null;
                
         try {
             statement = connection.prepareStatement(insertString, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, domainName);
-            statement.setString(2, searchTerm);
-            System.out.println(statement.toString());
+            statement.setString(1, userEmail);
+            statement.setString(2, domainName);
+            statement.setString(3, searchTerm);
+            statement.setString(4, timeStamp);
             int affectedRows = statement.executeUpdate();
             if(affectedRows == 0)
                 return false;
