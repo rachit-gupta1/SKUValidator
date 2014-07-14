@@ -92,29 +92,6 @@ public class SKUValidatorView extends FrameView {
 
         
 
-        
-
-        
-        modifyProfileButton.setText(resourceMap.getString("modifyProfileButton.text")); // NOI18N
-        modifyProfileButton.setName("modifyProfileButton"); // NOI18N
-        modifyProfileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                modifyProfileButtonActionPerformed(evt);
-            }
-        });
-
-        deleteProfileButton.setText(resourceMap.getString("deleteProfileButton.text")); // NOI18N
-        deleteProfileButton.setName("deleteProfileButton"); // NOI18N
-        deleteProfileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteProfileButtonActionPerformed(evt);
-            }
-        });
-
-        
-
-        
-
         mainPanel.add(Panel3, "card4");
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
@@ -147,26 +124,11 @@ public class SKUValidatorView extends FrameView {
         cards.show(mainPanel, "card3");
     }//GEN-LAST:event_createProfilesButtonActionPerformed
 
-    
-
-    
-
-    
-
-
-    
-
     private void listProfilesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listProfilesButtonActionPerformed
         // TODO add your handling code here:
         CardLayout cards = (CardLayout)mainPanel.getLayout();
         cards.show(mainPanel, "card4");
     }//GEN-LAST:event_listProfilesButtonActionPerformed
-
-    
-
-   
-
-    
 
     private javax.swing.JPanel Panel1;
     private javax.swing.JPanel Panel2;
