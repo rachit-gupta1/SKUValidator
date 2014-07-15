@@ -5,6 +5,7 @@
 package skuvalidator;
 
 import java.awt.CardLayout;
+import java.util.Arrays;
 import javax.swing.JPanel;
 import java.util.List;
 import javax.swing.DefaultListModel;
@@ -12,6 +13,10 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  *
@@ -26,6 +31,7 @@ public class ListProfilesView extends JPanel {
     private javax.swing.JButton modifyProfileButton;
     private javax.swing.JButton runProfileButton;
     private javax.swing.JButton okButton;
+    private javax.swing.JLabel statusLabel;
     
     List<ProfileDetails> resultList;
     ProfileDetails selectedProfile;
@@ -90,7 +96,7 @@ public class ListProfilesView extends JPanel {
             }
         });
 
-
+        statusLabel = new javax.swing.JLabel();
         
         javax.swing.GroupLayout Panel3Layout = new javax.swing.GroupLayout(this);
         setLayout(Panel3Layout);
@@ -100,17 +106,17 @@ public class ListProfilesView extends JPanel {
                 .addContainerGap()
                 .addGroup(Panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(Panel3Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addGroup(Panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(deleteProfileButton, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
-                            .addComponent(modifyProfileButton, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
-                            .addComponent(runProfileButton, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
+                            .addComponent(deleteProfileButton, javax.swing.GroupLayout.DEFAULT_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(modifyProfileButton, javax.swing.GroupLayout.DEFAULT_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(runProfileButton, javax.swing.GroupLayout.DEFAULT_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Panel3Layout.createSequentialGroup()
-                        .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(114, 114, 114))))
-        );
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, Panel3Layout.createParallelGroup()
+                        .addComponent(okButton, javax.swing.GroupLayout.DEFAULT_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                         .addComponent(statusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(114, 114, 114)))));
         Panel3Layout.setVerticalGroup(
             Panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(Panel3Layout.createSequentialGroup()
@@ -126,6 +132,8 @@ public class ListProfilesView extends JPanel {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(okButton)
+                .addGap(18, 18, 18)
+                .addComponent(statusLabel)
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         
@@ -157,7 +165,28 @@ public class ListProfilesView extends JPanel {
     }
      
     private void runProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        boolean result = true;
+        String domainName = selectedProfile.getDomainName();
+        String searchTerm = selectedProfile.getSearchTerm();
+        String[] skuString = selectedProfile.getSKUList().split(",");
+        List<String> skuList = Arrays.asList(skuString);
+        domainName += "/find/" + searchTerm.replaceAll(" ", "-");
+        HttpRequestHandler httpHandler = new HttpRequestHandler(domainName);
+        String httpResult = httpHandler.ExecuteRequest();
+        Document doc = Jsoup.parse(httpResult);
+        Elements skuElements = doc.getElementsByAttribute("data-sku");
+        for (Element sku : skuElements) {
+            String skuValue = sku.attr("data-sku");
+            if(!skuList.contains(skuValue)) {
+                result = false;
+                statusLabel.setText("SKU Not Found: " + skuValue);
+                break;
+            }
+        }
+        
+        if(result && !httpResult.equals("")) {
+            statusLabel.setText("All SKUs were found.");
+        }
     }
     
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -172,7 +201,7 @@ public class ListProfilesView extends JPanel {
         resultList = dbHandler.getAllEntries();
         DefaultListModel listModel = new DefaultListModel();
         for (ProfileDetails profileDetails : resultList) {
-            listModel.addElement(profileDetails.getDomainName() + "; " + profileDetails.getTimeStamp());
+            listModel.addElement(profileDetails.getDomainName() + ": " + profileDetails.getSearchTerm());
         }
         profileList.setModel(listModel);
         profileList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);

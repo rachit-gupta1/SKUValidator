@@ -218,7 +218,7 @@ public class CreateProfileView extends JPanel{
             reader.close();
             fileData = fileDataBuilder.toString();
             System.out.println(fileData);
-            String regex="[a-zA-Z0-9 ]*;[a-zA-Z0-9]*[,[a-zA-Z0-9]+]*";
+            String regex="[a-zA-Z0-9 ]*;[a-zA-Z0-9]*[,[ a-zA-Z0-9]+]*";
             if(!fileData.matches(regex))
                 isTestFileValid = false;
             else

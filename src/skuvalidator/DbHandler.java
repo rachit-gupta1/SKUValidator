@@ -79,6 +79,7 @@ public class DbHandler {
                 insertString = "INSERT INTO sku_list VALUES(?, ?)";
                 statement = connection.prepareStatement(insertString);
                 for (String string : SKUValues) {
+                    string = string.trim();
                     statement.setString(1, "" + SKUId);
                     statement.setString(2, string);
                     statement.executeUpdate();
