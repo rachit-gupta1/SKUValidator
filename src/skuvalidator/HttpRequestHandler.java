@@ -96,6 +96,17 @@ public class HttpRequestHandler {
             } else if (code == 404) {
                 JOptionPane.showMessageDialog(null, "Domain Name not found");
             }
+            else if(code ==200) {
+                //No authorisation required
+                InputStream content = (InputStream) connection.getInputStream();
+                BufferedReader in = new BufferedReader(new InputStreamReader(content));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+                return (sb.toString());
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Domain Name not found");
             e.printStackTrace();
