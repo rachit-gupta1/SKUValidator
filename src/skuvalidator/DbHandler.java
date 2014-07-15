@@ -98,7 +98,39 @@ public class DbHandler {
         return true;
     }
 
-    public boolean modifyEntry() {
+    public boolean modifyEntry(String id, String userEmail, String domainName, String searchTerm, String SKUList, String timeStamp) {
+        String insertString = "UPDATE profile_list SET user_email = ?, domain_name = ?, search_term = ?, timestamp = ?" +
+                              " WHERE profile_id=" + id;
+        ResultSet generatedKeys = null;
+               
+        try {
+            statement = connection.prepareStatement(insertString, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, userEmail);
+            statement.setString(2, domainName);
+            statement.setString(3, searchTerm);
+            statement.setString(4, timeStamp);
+            int affectedRows = statement.executeUpdate();
+            if(affectedRows == 0)
+                return false;
+            
+            String deleteString = "DELETE FROM sku_list WHERE sku_id=" + id;
+            
+            String[] SKUValues = SKUList.split(",");
+                insertString = "INSERT INTO sku_list VALUES(?, ?)";
+                statement = connection.prepareStatement(insertString);
+                for (String string : SKUValues) {
+                    string = string.trim();
+                    statement.setString(1, "" + id);
+                    statement.setString(2, string);
+                    statement.executeUpdate();
+                }
+                statement.close();
+                connection.close();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DbHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
         return true;
     }
 
