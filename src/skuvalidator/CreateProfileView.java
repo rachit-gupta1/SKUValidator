@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -44,12 +43,12 @@ public class CreateProfileView extends JPanel{
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(skuvalidator.SKUValidatorApp.class).getContext().getResourceMap(SKUValidatorView.class);
         
         jLabel1 = new javax.swing.JLabel();
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
-        jLabel1.setName("jLabel1"); // NOI18N
+        jLabel1.setText(resourceMap.getString("jLabel1.text"));
+        jLabel1.setName("jLabel1");
         
         domainTextField = new javax.swing.JTextField();
-        domainTextField.setText(resourceMap.getString("domainTextField.text")); // NOI18N
-        domainTextField.setName("domainTextField"); // NOI18N
+        domainTextField.setText(resourceMap.getString("domainTextField.text"));
+        domainTextField.setName("domainTextField");
         
         userEmailLabel = new javax.swing.JLabel();
         userEmailLabel.setText(resourceMap.getString("userEmailLabel.text"));
@@ -59,8 +58,8 @@ public class CreateProfileView extends JPanel{
         userEmailField.setName("userEmailField");
                
         submitButton = new javax.swing.JButton();
-        submitButton.setText(resourceMap.getString("submitButton.text")); // NOI18N
-        submitButton.setName("submitButton"); // NOI18N
+        submitButton.setText(resourceMap.getString("submitButton.text"));
+        submitButton.setName("submitButton");
         submitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 submitButtonActionPerformed(evt);
@@ -68,8 +67,8 @@ public class CreateProfileView extends JPanel{
         });
         
         uploadTestFileButton = new javax.swing.JButton();
-        uploadTestFileButton.setText(resourceMap.getString("uploadTestFileButton.text")); // NOI18N
-        uploadTestFileButton.setName("uploadTestFileButton"); // NOI18N
+        uploadTestFileButton.setText(resourceMap.getString("uploadTestFileButton.text"));
+        uploadTestFileButton.setName("uploadTestFileButton");
         uploadTestFileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 uploadTestFileButtonActionPerformed(evt);
@@ -77,11 +76,11 @@ public class CreateProfileView extends JPanel{
         });
         
         filler1 = new javax.swing.Box.Filler(null, null, null);
-        filler1.setName("filler1"); // NOI18N
+        filler1.setName("filler1");
         
         cancelButton = new javax.swing.JButton();
-        cancelButton.setText(resourceMap.getString("cancelButton.text")); // NOI18N
-        cancelButton.setName("cancelButton"); // NOI18N
+        cancelButton.setText(resourceMap.getString("cancelButton.text"));
+        cancelButton.setName("cancelButton");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
@@ -145,6 +144,7 @@ public class CreateProfileView extends JPanel{
         String domainName = domainTextField.getText();
         String userEmail = userEmailField.getText();
         String timeStamp = new SimpleDateFormat("dd-mm-yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
+        System.out.println(timeStamp);
         
         if("".equals(domainName)) {
             JOptionPane.showMessageDialog(this, "The domain name cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);

@@ -35,8 +35,6 @@ public class SKUValidatorView extends FrameView {
         listProfilesButton = new javax.swing.JButton();
         Panel2 = new CreateProfileView(mainPanel);
         Panel3 = new ListProfilesView(mainPanel);
-        modifyProfileButton = new javax.swing.JButton();
-        deleteProfileButton = new javax.swing.JButton();
 
         jFrame1.setName("jFrame1"); // NOI18N
 
@@ -85,13 +83,10 @@ public class SKUValidatorView extends FrameView {
 
         mainPanel.add(Panel1, "card2");
 
-        Panel2.setName("Panel2"); // NOI18N
+        Panel2.setName("Panel2");
         mainPanel.add(Panel2, "card3");
 
-        Panel3.setName("Panel3"); // NOI18N
-
-        
-
+        Panel3.setName("Panel3");
         mainPanel.add(Panel3, "card4");
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
@@ -134,10 +129,8 @@ public class SKUValidatorView extends FrameView {
     private javax.swing.JPanel Panel2;
     private javax.swing.JPanel Panel3;
     private javax.swing.JButton createProfilesButton;
-    private javax.swing.JButton deleteProfileButton;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JButton listProfilesButton;
     private javax.swing.JPanel mainPanel;
-    private javax.swing.JButton modifyProfileButton;
 
 }
