@@ -116,12 +116,18 @@ public class SKUValidatorView extends FrameView {
     private void createProfilesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createProfilesButtonActionPerformed
         // TODO add your handling code here:
         CardLayout cards = (CardLayout)mainPanel.getLayout();
+        mainPanel.remove(Panel2);
+        Panel2 = new CreateProfileView(mainPanel);
+        mainPanel.add(Panel2, "card3");
         cards.show(mainPanel, "card3");
     }//GEN-LAST:event_createProfilesButtonActionPerformed
 
     private void listProfilesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listProfilesButtonActionPerformed
         // TODO add your handling code here:
         CardLayout cards = (CardLayout)mainPanel.getLayout();
+        mainPanel.remove(Panel3);
+        Panel3 = new ListProfilesView(mainPanel);
+        mainPanel.add(Panel3, "card4");
         cards.show(mainPanel, "card4");
     }//GEN-LAST:event_listProfilesButtonActionPerformed
 
