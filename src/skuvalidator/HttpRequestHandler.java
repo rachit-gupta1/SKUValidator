@@ -20,26 +20,27 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class HttpRequestHandler {
-
-    URL url;
+    
     HttpURLConnection connection;
-    String URL;
-
+    String url;
+    
     public HttpRequestHandler() {
-        URL = "";
+        url = "";
+    }
+
+    public HttpRequestHandler(String urlString) {
+        url = urlString;
 
     }
 
     public void SetUrl(String link) {
-        URL = link;
-
+        url = link;
     }
 
-    public void ExecuteRequest() {
-        try {
-
-            url = new URL(URL);
-            connection = (HttpURLConnection) url.openConnection();
+    public String ExecuteRequest() {
+        try { 
+            URL URLObject = new URL(url);
+            connection = (HttpURLConnection) URLObject.openConnection();
             connection.setRequestMethod("POST");
             connection.connect();
             int code = connection.getResponseCode();
@@ -64,7 +65,7 @@ public class HttpRequestHandler {
                 if (input == JOptionPane.OK_OPTION) {
                     String userPassword = userName + ":" + password;
                     String encoding = new sun.misc.BASE64Encoder().encode(userPassword.getBytes());
-                    connection = (HttpURLConnection) url.openConnection();
+                    connection = (HttpURLConnection) URLObject.openConnection();
                     connection.setRequestMethod("POST");
                     connection.setDoOutput(true);
                     connection.setRequestProperty("Authorization", "Basic " + encoding);
@@ -75,15 +76,19 @@ public class HttpRequestHandler {
                         JOptionPane.showMessageDialog(null, "Authorised user");
                         InputStream content = (InputStream) connection.getInputStream();
                         BufferedReader in = new BufferedReader(new InputStreamReader(content));
+                        StringBuilder sb = new StringBuilder(); 
                         String line;
-                        while ((line = in.readLine()) != null) {
-                            System.out.println(line);
-                        }
+                        while((line=in.readLine())!=null)
+                        {
+                           sb.append(line);
+                        }   
+                        return (sb.toString());
                     } else {
                         //Invalid user
                         JOptionPane.showMessageDialog(null, "Invalid User");
-                        ExecuteRequest();
+                        return ExecuteRequest();
                     }
+                    
                 }
 
 
@@ -96,5 +101,6 @@ public class HttpRequestHandler {
             e.printStackTrace();
 
         }
+        return "";
     }
 }
