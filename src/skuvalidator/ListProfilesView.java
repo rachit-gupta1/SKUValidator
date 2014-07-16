@@ -162,6 +162,11 @@ public class ListProfilesView extends JPanel {
     
      private void modifyProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+         
+        CardLayout cards = (CardLayout)mainPanel.getLayout();
+        JPanel modifyPanel = new ModifyProfileView(mainPanel, selectedProfile);
+        mainPanel.add(modifyPanel, "card5");
+        cards.show(mainPanel, "card5");
     }
      
     private void runProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {
